@@ -1,10 +1,11 @@
 'use client';
 
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
 import { useRef } from 'react';
 import { GOLD_LINES, RIDGE_PATHS, RIDGE_VIEWBOX, TONES, type Tone } from '@/components/ridge';
 import { ButtonLink, TextLink } from '@/components/ui';
-import { CONCEPT_ILLUSTRATION_NOTE } from '@/content/site';
+import { CONCEPT_CAPTION, CONCEPT_ILLUSTRATION_NOTE } from '@/content/site';
 
 // Back to front. A touch of parallax makes the ridges feel layered. Disabled for reduced motion.
 const LAYERS: { d: string; fill: Tone; travel: number }[] = [
@@ -14,7 +15,14 @@ const LAYERS: { d: string; fill: Tone; travel: number }[] = [
   { d: RIDGE_PATHS[3], fill: 'deep', travel: 0 },
 ];
 
-export function Hero() {
+export interface HeroImage {
+  src: string;
+  alt: string;
+  /** True for AI-generated concept images: the concept caption is then always shown. */
+  concept: boolean;
+}
+
+export function Hero({ image }: { image?: HeroImage | null }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
@@ -31,10 +39,19 @@ export function Hero() {
       className="on-dark relative isolate -mt-[64px] flex min-h-[100svh] flex-col overflow-hidden bg-deep text-white"
       style={{ background: 'linear-gradient(180deg, #0e2e21 0%, #123b2a 34%, #2c5a45 66%, #7ca088 100%)' }}
     >
-      {/* Sun and glow */}
+      {image && (
+        <>
+          <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="z-0 object-cover" />
+          {/* Keeps white text readable on any photograph. */}
+          <div aria-hidden="true" className="absolute inset-0 z-0 bg-gradient-to-b from-night/85 via-deep/55 to-deep/15" />
+        </>
+      )}
+
+      {/* Sun and glow (the drawn sun is replaced by the image when one is supplied) */}
       <motion.div
         aria-hidden="true"
         style={{ y: sunY, bottom: 'clamp(150px, 30svh, 330px)' }}
+        hidden={!!image}
         className="pointer-events-none absolute right-[9%] z-0 aspect-square w-[clamp(96px,15vw,210px)] rounded-full"
       >
         <div className="absolute -inset-[60%] rounded-full bg-[radial-gradient(circle,rgba(217,178,103,0.38)_0%,rgba(217,178,103,0)_62%)]" />
@@ -82,7 +99,7 @@ export function Hero() {
         </div>
       </div>
 
-      <p className="absolute bottom-2.5 right-[clamp(20px,5vw,72px)] z-10 text-[0.8125rem] text-mist">{CONCEPT_ILLUSTRATION_NOTE}</p>
+      <p className="absolute bottom-2.5 right-[clamp(20px,5vw,72px)] z-10 text-[0.8125rem] text-mist">{image?.concept ? CONCEPT_CAPTION : CONCEPT_ILLUSTRATION_NOTE}</p>
     </section>
   );
 }

@@ -38,6 +38,7 @@ openssl rand -base64 48
 | `npm test` | Vitest: all 7 registration pathways, validation, honeypot, rate limit, auth, CSV and Excel export, formula injection, content rules, asset register |
 | `npm run test:e2e` | Browser checks at 360 px and 1440 px (needs a running server, see below) |
 | `npm run assets:register` | Regenerates `docs/asset-register.md` from `src/content/images.ts` |
+| `npm run images:add` | Wires image files from `public/images/` into the image config and register |
 | `npm run check` | Lint, types, tests and build in one go |
 
 Browser checks cover: no horizontal scroll and one `h1` on every page, axe-core (WCAG 2.1 AA, serious and critical), mobile menu and Escape key, the courtyard map by hover, tap and keyboard focus, every registration pathway end to end, rate-limit messaging, cookie consent with no third-party requests, journal filters, the team view (sign-in, search, worksheet filter, CSV and Excel downloads), and reduced motion.
@@ -158,7 +159,13 @@ See `.env.example`. Never commit real values. `.env*` (except the example) and `
 
 No image is copied from the internet. `src/content/images.ts` is the central image configuration and the asset register in one file, so they cannot drift apart. Every slot is currently a ridge-motif placeholder that states what is needed. `docs/asset-register.md` is generated from it and also records the logo, fonts and ridge illustrations.
 
-To add an image: place it in `public/images/`, set `src`, `width`, `height`, fill in every `register` field, and set `approvalStatus` to `approved` only once Sai Legacy Holdings has signed it off. For AI-generated images, set `kind: 'ai-concept'`. The `SiteImage` component then **always** overlays the caption "Concept for illustration only. Not an approved design or completed facility."
+To add images, follow `docs/image-brief.md` (a prompt, ratio and rules for each of the eight slots), name each file after its slot id (for example `public/images/home-hero.jpg`), then run:
+
+```bash
+npm run images:add -- --tool="Name and version of the tool" --date=2026-11-02
+```
+
+This reads each file's size, points the slot at it, marks it as an AI concept image awaiting review, and regenerates `docs/asset-register.md`. Then record the prompt in each register entry in `src/content/images.ts`, and set `approvalStatus` to `approved` only once Sai Legacy Holdings has signed it off (re-running the command never resets an approved entry). Use `--kind=licensed`, `--kind=commissioned` or `--kind=client-supplied` for non-AI images. For AI images the `SiteImage` component and the hero **always** show the caption "Concept for illustration only. Not an approved design or completed facility." The homepage hero shows a supplied `home-hero` image beneath the headline, with a dark overlay for legibility and the ridge motif layered on top.
 
 The Sai Legacy Holdings logo is used exactly as supplied (1000 x 307 px, unaltered proportions and colours). The supplied file has an opaque white background, so it is always shown on a white panel. A transparent or SVG version would let it sit directly on brand colours.
 

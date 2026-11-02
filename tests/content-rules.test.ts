@@ -23,7 +23,7 @@ describe('content rules', () => {
   });
 
   it('does not use cultural patterns that have not been supplied', () => {
-    const offenders = files.filter((f) => !f.includes('images.ts') && !f.endsWith('README.md') && /\b(kente|adinkra)\b/i.test(readFileSync(f, 'utf8')));
+    const offenders = files.filter((f) => !f.includes('images.ts') && !f.endsWith('README.md') && !f.endsWith('image-brief.md') && /\b(kente|adinkra)\b/i.test(readFileSync(f, 'utf8')));
     expect(offenders).toEqual([]);
   });
 

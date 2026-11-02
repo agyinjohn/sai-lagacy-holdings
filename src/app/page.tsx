@@ -8,12 +8,14 @@ import { SiteImage } from '@/components/site-image';
 import { ButtonLink, Eyebrow, Section, TextLink } from '@/components/ui';
 import { registerHref } from '@/content/links';
 import { STORY_PAGES } from '@/content/pages';
+import { IMAGES, type SiteImageConfig } from '@/content/images';
 
 export default function HomePage() {
   const culture = STORY_PAGES.culture;
+  const heroCfg: SiteImageConfig = IMAGES['home-hero'];
   return (
     <>
-      <Hero />
+      <Hero image={heroCfg.src ? { src: heroCfg.src, alt: heroCfg.alt, concept: heroCfg.kind === 'ai-concept' } : null} />
 
       {/* 2. Courtyard vision story */}
       <Section tone="deep" labelledBy="story-title">

@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:e2e": "node scripts/browser-check.mjs",
     "assets:register": "node scripts/generate-asset-register.mjs",
+    "images:add": "node scripts/add-images.mjs",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "pg-mem": "^3.0.14",
     "playwright": "^1.64.1",
     "postcss": "^8.5.32",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.4",
     "typescript": "^6.0.3",
     "vitest": "^5.1.0"
