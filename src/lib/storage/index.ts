@@ -1,14 +1,15 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { RegistrationRecord } from '@/lib/types';
+import { createPostgresStoreFromEnv } from '@/lib/storage/postgres';
 
 /**
  * Storage abstraction. The prototype ships two adapters:
+ *  - "postgres": a Postgres database via DATABASE_URL (use this on Vercel and any serverless host).
  *  - "file":   a private JSON file (default). Fine for a demo on a single server.
  *  - "memory": lost on restart. Used by tests.
  *
- * To go live, implement RegistrationStore against a real database (for example
- * Postgres, Supabase or Airtable) and return it from getStore(). Nothing else changes.
+ * Other databases: implement RegistrationStore and return it from getStore(). Nothing else changes.
  */
 export interface RegistrationStore {
   add(record: RegistrationRecord): Promise<void>;
@@ -72,13 +73,14 @@ export function getStore(): RegistrationStore {
   const driver = process.env.STORAGE_DRIVER ?? 'file';
   // Resolved at runtime on purpose: the data directory is private and must never be traced into the bundle.
   const dir = path.resolve(/*turbopackIgnore: true*/ process.cwd(), process.env.DATA_DIR ?? '.data');
-  const key = `${driver}:${dir}`;
+  const key = `${driver}:${dir}:${driver === 'postgres' ? process.env.DATABASE_URL ?? '' : ''}`;
   if (g.__cbsStore?.key === key) return g.__cbsStore.store;
 
   let store: RegistrationStore;
   if (driver === 'memory') store = new MemoryStore();
   else if (driver === 'file') store = new FileStore(dir);
-  else throw new Error(`Unknown STORAGE_DRIVER "${driver}". Use "file" or "memory", or add an adapter.`);
+  else if (driver === 'postgres') store = createPostgresStoreFromEnv();
+  else throw new Error(`Unknown STORAGE_DRIVER "${driver}". Use "postgres", "file" or "memory".`);
 
   g.__cbsStore = { key, store };
   return store;

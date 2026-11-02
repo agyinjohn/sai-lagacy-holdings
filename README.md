@@ -8,7 +8,7 @@ Creative concept: **Rooted on the Ridge**. The layered ridge line is the main gr
 
 ## Stack
 
-Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Zod 4 · ExcelJS (Excel export only) · Vitest · Playwright with axe-core (browser checks, dev only).
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Zod 4 · ExcelJS (Excel export only) · pg (Postgres adapter) · Vitest · Playwright with axe-core (browser checks, dev only).
 No paid services or third-party accounts are used.
 
 ## Getting started
@@ -85,13 +85,14 @@ src/
     journal.ts         Journal categories and sample entries
   lib/
     validation.ts      Zod schemas shared by browser and server
-    storage/           Storage abstraction (file, memory)
+    storage/           Storage abstraction (postgres, file, memory)
     email/             Email abstraction (console only)
     rate-limit.ts      Sliding-window limiter
     team-auth.ts       Credentials check and signed session cookie
     export.ts          CSV and Excel export with formula-injection protection
 tests/                 Vitest suites
 scripts/               Browser checks and asset register generator
+db/schema.sql         Registrations table (also applied automatically)
 docs/asset-register.md Generated register of images, logo, fonts and illustrations
 ```
 
@@ -140,7 +141,10 @@ See `.env.example`. Never commit real values. `.env*` (except the example) and `
 |---|---|
 | `NEXT_PUBLIC_SITE_URL` | Public URL for canonical links, sitemap, robots and Open Graph |
 | `TEAM_USERNAME`, `TEAM_PASSWORD`, `TEAM_SESSION_SECRET` | Team area credentials and cookie signing secret |
-| `STORAGE_DRIVER` | `file` (default) or `memory` |
+| `STORAGE_DRIVER` | `postgres`, `file` (default) or `memory` |
+| `DATABASE_URL` | Postgres connection string (required for `postgres`) |
+| `DATABASE_AUTO_MIGRATE` | `false` to skip automatic table creation (default `true`) |
+| `PG_POOL_MAX` | Connections per server instance (default 3) |
 | `DATA_DIR` | Directory for the file adapter (default `.data`) |
 | `EMAIL_DRIVER` | `console` only. No real email is sent |
 | `TEAM_NOTIFICATION_EMAIL` | Optional recipient shown in the suppressed team notification |
@@ -171,11 +175,20 @@ A cookie banner appears until a choice is made, and can be reopened from the foo
 4. Set `NEXT_PUBLIC_SITE_URL` to the final domain and confirm `/sitemap.xml` and `/robots.txt`.
 5. Sign in at `/team`, submit each registration, and check both exports.
 
-**Important for serverless hosts:** the default file storage and the in-memory rate limiter do not persist across serverless instances. Before using the prototype with real visitors, connect a database and a shared rate-limit store (see below).
+### Deploying to Vercel with Postgres
+
+1. Create a Postgres database. Any provider that gives you a connection string works (for example Neon or Supabase, including via the Vercel Marketplace). Free tiers exist, but creating the account is your decision.
+2. In Vercel, add `STORAGE_DRIVER=postgres` and `DATABASE_URL=<your connection string>` alongside the other variables. Use a pooled connection string if your provider offers one.
+3. Deploy. The `registrations` table is created automatically on first use. To manage the schema yourself, set `DATABASE_AUTO_MIGRATE=false` and run `db/schema.sql` once.
+4. Submit a test registration and confirm it appears at `/team` and in the table.
+
+The Postgres adapter is `src/lib/storage/postgres.ts`. It uses parameterised queries only, enforces unique references and recorded consent in the database, and is covered by tests against an in-memory Postgres emulator. It has not been run against a live database in this repository, so do step 4 before relying on it.
+
+**Rate limiting on serverless hosts:** the limiter is still in memory, so limits apply per instance only. Move it to a shared store (for example Redis) before launch.
 
 ## What must change before production
 
-- [ ] **Real storage:** implement `RegistrationStore` (`src/lib/storage/index.ts`) against an approved database. The JSON file is for demonstration only.
+- [ ] **Real storage:** use the Postgres adapter (`STORAGE_DRIVER=postgres`) or another approved database, and decide on retention, backups and access controls. The JSON file is for local demonstration only.
 - [ ] **Real email:** implement `EmailAdapter` (`src/lib/email/index.ts`) with an approved provider, and supply the team inbox address. Review the acknowledgement wording.
 - [ ] **Shared rate limiting:** move `RateLimiter` to Redis or equivalent so limits hold across instances.
 - [ ] **Team access:** replace the single shared password with named accounts or the host's SSO, add audit logging of exports, and consider server-side pagination for large volumes.
@@ -186,7 +199,7 @@ A cookie banner appears until a choice is made, and can be reopened from the foo
 - [ ] **Remove prototype signals:** the prototype banner, form notices and footer wording should be removed or revised at launch.
 - [ ] **Content Security Policy:** it currently allows inline scripts, which Next.js needs without a nonce. Add per-request nonces through a proxy for a stricter policy.
 - [ ] **Monitoring and backups:** error monitoring, uptime checks and backups for stored registrations.
-- [ ] **Dependencies:** `npm audit` reports a moderate minimatch advisory in dev-only lint tooling. It does not ship to visitors. Re-check before launch.
+- [ ] **Dependencies:** `npm audit` reports moderate minimatch advisories (denial of service via glob patterns). They arrive through lint tooling and through `exceljs` (a runtime dependency, used only by the authenticated Excel export and not fed user-controlled glob patterns). Re-check before launch, and consider a lighter Excel library if one is acceptable.
 - [ ] **Accessibility:** automated axe checks pass, but commission a manual audit with assistive technology before launch.
 
 ## Content rules followed
