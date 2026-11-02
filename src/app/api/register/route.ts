@@ -24,13 +24,12 @@ export async function POST(request: Request) {
   const { submit, attempts } = limiters();
   const key = clientKey(request.headers);
 
-  const gate = attempts.check(key);
-  const quota = submit.check(key);
+  const [gate, quota] = await Promise.all([attempts.check(key), submit.check(key)]);
   if (!gate.allowed || !quota.allowed) {
     const retry = Math.max(gate.retryAfterSeconds, quota.retryAfterSeconds);
     return json({ ok: false, error: 'rate_limited', retryAfterSeconds: retry }, 429, { 'Retry-After': String(retry) });
   }
-  attempts.hit(key);
+  await attempts.hit(key);
 
   let raw: string;
   try {
@@ -54,7 +53,7 @@ export async function POST(request: Request) {
 
   // Honeypot: real people never see or fill this field. Pretend success, store nothing, and count the hit.
   if (typeof payload.website === 'string' && payload.website.trim() !== '') {
-    submit.hit(key);
+    await submit.hit(key);
     return json({ ok: true, ref: 'CBS-RECEIVED', pathway }, 201);
   }
 
@@ -65,7 +64,7 @@ export async function POST(request: Request) {
 
   try {
     const record = await saveRegistration(pathway, parsed.data);
-    submit.hit(key);
+    await submit.hit(key);
     return json({ ok: true, ref: record.ref, pathway }, 201);
   } catch (err) {
     console.error('Registration failed:', err instanceof Error ? err.message : 'unknown error');

@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   const { login } = limiters();
   const key = clientKey(request.headers);
-  const gate = login.check(key);
+  const gate = await login.check(key);
   if (!gate.allowed) {
     return json({ ok: false, error: 'rate_limited', retryAfterSeconds: gate.retryAfterSeconds }, 429, {
       'Retry-After': String(gate.retryAfterSeconds),
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   if (!parsed.success) return json({ ok: false, error: 'invalid' }, 400);
 
   if (!verifyCredentials(parsed.data.username, parsed.data.password)) {
-    login.hit(key);
+    await login.hit(key);
     return json({ ok: false, error: 'invalid_credentials' }, 401);
   }
 

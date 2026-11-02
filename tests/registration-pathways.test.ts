@@ -41,8 +41,8 @@ describe('registration pathways (server validation and storage)', () => {
 
     it('accepts every option listed for the pathway-specific detail', async () => {
       for (const option of cfg.detailOptions) {
-        limiters().submit.reset();
-        limiters().attempts.reset();
+        await limiters().submit.reset();
+        await limiters().attempts.reset();
         const res = await POST(postRequest(validPayload(slug, { detail: option })));
         expect(res.status, option).toBe(201);
       }

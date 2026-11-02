@@ -134,7 +134,7 @@ for (const [label, width, height, mobile] of [['mobile 360', 360, 740, true], ['
   await ap.getByLabel('Username').fill(USER);
   await ap.getByLabel('Password').fill('wrong-password');
   await ap.getByRole('button', { name: 'Sign in' }).click();
-  ok(await ap.getByRole('alert').isVisible(), 'wrong password shows an error');
+  ok(await ap.getByText('were not recognised').waitFor({ timeout: 5000 }).then(() => true, () => false), 'wrong password shows an error');
   await ap.getByLabel('Password').fill(PASS);
   await ap.getByRole('button', { name: 'Sign in' }).click();
   await ap.getByRole('heading', { name: /Registration tracker/ }).waitFor();

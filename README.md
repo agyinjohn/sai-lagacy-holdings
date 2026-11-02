@@ -87,7 +87,8 @@ src/
     validation.ts      Zod schemas shared by browser and server
     storage/           Storage abstraction (postgres, file, memory)
     email/             Email abstraction (console only)
-    rate-limit.ts      Sliding-window limiter
+    rate-limit.ts      Sliding-window limiter (memory and Upstash backends)
+    rate-limit-upstash.ts  Upstash Redis REST backend
     team-auth.ts       Credentials check and signed session cookie
     export.ts          CSV and Excel export with formula-injection protection
 tests/                 Vitest suites
@@ -148,6 +149,8 @@ See `.env.example`. Never commit real values. `.env*` (except the example) and `
 | `DATA_DIR` | Directory for the file adapter (default `.data`) |
 | `EMAIL_DRIVER` | `console` only. No real email is sent |
 | `TEAM_NOTIFICATION_EMAIL` | Optional recipient shown in the suppressed team notification |
+| `RATE_LIMIT_DRIVER` | `upstash` or `memory`. Unset means Upstash when its credentials exist, otherwise memory |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST credentials (`KV_REST_API_URL` and `KV_REST_API_TOKEN` also work) |
 | `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_SECONDS` | Registration rate limit (default 5 per 600 seconds) |
 | `NEXT_PUBLIC_ANALYTICS_PROVIDER`, `NEXT_PUBLIC_ANALYTICS_ID` | Analytics placeholder, inactive until consent and a wired-in provider |
 
@@ -184,13 +187,23 @@ A cookie banner appears until a choice is made, and can be reopened from the foo
 
 The Postgres adapter is `src/lib/storage/postgres.ts`. It uses parameterised queries only, enforces unique references and recorded consent in the database, and is covered by tests against an in-memory Postgres emulator. It has not been run against a live database in this repository, so do step 4 before relying on it.
 
-**Rate limiting on serverless hosts:** the limiter is still in memory, so limits apply per instance only. Move it to a shared store (for example Redis) before launch.
+### Shared rate limiting with Upstash
+
+On serverless hosts the in-memory limiter only counts per instance, so limits are easy to sidestep. Use Upstash Redis for limits shared across instances:
+
+1. Create an Upstash Redis database (a free tier exists, but creating the account is your decision). Copy the REST URL and REST token from its console, or add Upstash through the Vercel Marketplace, which sets `KV_REST_API_URL` and `KV_REST_API_TOKEN`.
+2. In Vercel, set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (or rely on the KV names). Optionally set `RATE_LIMIT_DRIVER=upstash` to make a missing credential a hard error instead of a silent in-memory fallback.
+3. Redeploy. No code changes are needed.
+
+How it works (`src/lib/rate-limit-upstash.ts`): a sliding window kept as a Redis sorted set per client, using Upstash's REST API through `fetch` with no extra dependency. Client IP addresses are SHA-256 hashed before being sent, so the raw address never reaches Redis. If Upstash is unreachable, the limiter logs the error and answers from the in-memory limiter for that request, so a Redis outage never blocks genuine visitors and each instance still protects itself. Check-then-record is two requests, so simultaneous requests from one client can briefly exceed the limit. That is acceptable for abuse protection and is not a strict quota.
+
+The adapter is tested against an in-process fake of the Upstash REST endpoint, not a live Upstash database. After deploying, confirm it works by submitting six registrations quickly from one device (the sixth should be refused) and checking that keys beginning `cbs:rl:` appear in the Upstash data browser.
 
 ## What must change before production
 
 - [ ] **Real storage:** use the Postgres adapter (`STORAGE_DRIVER=postgres`) or another approved database, and decide on retention, backups and access controls. The JSON file is for local demonstration only.
 - [ ] **Real email:** implement `EmailAdapter` (`src/lib/email/index.ts`) with an approved provider, and supply the team inbox address. Review the acknowledgement wording.
-- [ ] **Shared rate limiting:** move `RateLimiter` to Redis or equivalent so limits hold across instances.
+- [ ] **Shared rate limiting:** configure the Upstash backend (or another shared store) so limits hold across instances, and verify it against the live service.
 - [ ] **Team access:** replace the single shared password with named accounts or the host's SSO, add audit logging of exports, and consider server-side pagination for large volumes.
 - [ ] **Legal:** final privacy notice, cookie wording, consent wording, retention and deletion process, data controller details and any local registration requirements, all approved by the legal adviser to Sai Legacy Holdings.
 - [ ] **Investment content:** supply the approved Legacy Unit overview and legal disclaimer. Do not publish sensitive investment documents. Have investment promotion wording reviewed for regulatory compliance.
