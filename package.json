@@ -1,0 +1,39 @@
+{
+  "name": "courtyard-by-sai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Courtyard by Sai: prototype website for Sai Legacy Holdings",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "node scripts/browser-check.mjs",
+    "assets:register": "node scripts/generate-asset-register.mjs",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "framer-motion": "^14.9.0",
+    "next": "^16.4.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.4",
+    "playwright": "^1.64.1",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.4",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.0"
+  }
+}
