@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { MAP_ROOMS, type MapRoom } from '@/content/map';
 import { registerHref } from '@/content/links';
 import { DIAGRAM_NOTE } from '@/content/site';
@@ -26,6 +26,16 @@ const CELLS = [
 export function CourtyardMap() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const panelId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // On phones the details panel sits below the tiles, so bring it into view after a tap.
+  const reveal = (id: string) => {
+    setActiveId(id);
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      requestAnimationFrame(() => panelRef.current?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }));
+    }
+  };
   const active: MapRoom | undefined = MAP_ROOMS.find((r) => r.id === activeId);
 
   return (
@@ -41,8 +51,8 @@ export function CourtyardMap() {
               aria-controls={panelId}
               onMouseEnter={() => setActiveId(room.id)}
               onFocus={() => setActiveId(room.id)}
-              onClick={() => setActiveId(room.id)}
-              className={`group relative flex min-h-[88px] flex-col justify-between overflow-hidden rounded-[2px] border p-4 text-left transition-all duration-200 md:min-h-[150px] md:p-5 ${CELLS[i]} ${
+              onClick={() => reveal(room.id)}
+              className={`group relative flex min-h-[88px] flex-col justify-start gap-2 overflow-hidden rounded-[2px] border p-4 text-left transition-all duration-200 md:min-h-[140px] md:p-5 ${CELLS[i]} ${
                 on
                   ? '-translate-y-0.5 border-gold bg-white shadow-[0_10px_30px_-12px_rgba(18,59,42,0.35)]'
                   : 'border-pale bg-paper hover:border-gold hover:bg-white'
@@ -50,7 +60,7 @@ export function CourtyardMap() {
             >
               <span aria-hidden="true" className={`absolute inset-x-0 top-0 h-[3px] transition-colors ${on ? 'bg-gold' : 'bg-transparent group-hover:bg-gold-light'}`} />
               <span className="font-heading text-[1.05rem] leading-snug md:text-[1.3rem]">{room.title}</span>
-              <span className="mt-2 hidden text-[0.9rem] leading-snug text-deep/75 md:block">{room.text}</span>
+              <span className="hidden text-[0.9rem] leading-snug text-deep/75 md:block">{room.text}</span>
             </button>
           );
         })}
@@ -58,6 +68,7 @@ export function CourtyardMap() {
         {/* Courtyard: the centre of the plan and the details panel */}
         <div
           id={panelId}
+          ref={panelRef}
           role="region"
           aria-live="polite"
           aria-label="Courtyard details"

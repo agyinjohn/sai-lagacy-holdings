@@ -43,7 +43,7 @@ export function PageHero({
       </div>
       <div className="relative">
         <RidgeScene mood={mood} className="block w-full" style={{ height: 'clamp(150px, 24vw, 320px)' }} />
-        <p className="absolute bottom-2 right-[clamp(20px,5vw,72px)] text-[0.8125rem] text-mist">{CONCEPT_ILLUSTRATION_NOTE}</p>
+        <p className="absolute bottom-2 left-[clamp(20px,5vw,72px)] right-[clamp(20px,5vw,72px)] text-right text-[0.8125rem] text-mist">{CONCEPT_ILLUSTRATION_NOTE}</p>
       </div>
     </section>
   );

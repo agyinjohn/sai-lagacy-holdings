@@ -86,7 +86,6 @@ export default function VisionPage() {
               {VISION.setting.heading}
             </h2>
             <p className="mt-6 max-w-[34em]">{VISION.setting.body[0]}</p>
-            <SiteImage id="vision-setting" className="mt-8" />
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="display-2">{VISION.phased.heading}</h2>
@@ -96,6 +95,9 @@ export default function VisionPage() {
             </div>
           </Reveal>
         </div>
+        <Reveal className="mt-14 lg:mt-20">
+          <SiteImage id="vision-setting" ratio="aspect-[3/2] md:aspect-[2.2/1]" sizes="(min-width: 1296px) 1152px, 100vw" />
+        </Reveal>
       </Section>
 
       <CtaBand from="vision" above="mist" />

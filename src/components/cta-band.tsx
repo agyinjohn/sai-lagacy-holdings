@@ -27,14 +27,14 @@ export function CtaBand({
             </h2>
             <p className="lede mt-5 text-pale">{body}</p>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:justify-end">
-            <ButtonLink href={registerHref('guest-updates', from)} variant="gold">
+          <div className="flex flex-col gap-3 sm:max-w-sm lg:ml-auto lg:w-full lg:max-w-[320px]">
+            <ButtonLink href={registerHref('guest-updates', from)} variant="gold" className="w-full">
               Get guest updates
             </ButtonLink>
-            <ButtonLink href={registerHref('transformation-retreat', from)} variant="outline-light">
+            <ButtonLink href={registerHref('transformation-retreat', from)} variant="outline-light" className="w-full">
               Retreat waitlist
             </ButtonLink>
-            <ButtonLink href="/register" variant="outline-light">
+            <ButtonLink href="/register" variant="outline-light" className="w-full">
               All registrations
             </ButtonLink>
           </div>

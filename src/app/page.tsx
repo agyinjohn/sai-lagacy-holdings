@@ -62,10 +62,9 @@ export default function HomePage() {
                 Get guest updates
               </ButtonLink>
             </div>
-            <SiteImage id={culture.imageId} className="mt-12 hidden lg:block" />
           </Reveal>
           <Reveal delay={0.1}>
-            <ul className="grid gap-x-8 gap-y-0 sm:grid-cols-2">
+            <ul className="grid gap-x-8 sm:grid-cols-2">
               {['Ghanaian arts', 'Music', 'Gastronomy', 'Heritage', 'Creative workshops', 'Community engagement'].map((t, i) => (
                 <li key={t} className="border-t border-gold py-6">
                   <span className="eyebrow text-gold-ink">{String(i + 1).padStart(2, '0')}</span>
@@ -73,9 +72,11 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-            <SiteImage id={culture.imageId} className="mt-8 lg:hidden" />
           </Reveal>
         </div>
+        <Reveal className="mt-14 lg:mt-20">
+          <SiteImage id={culture.imageId} ratio="aspect-[3/2] md:aspect-[2/1]" sizes="(min-width: 1296px) 1152px, 100vw" />
+        </Reveal>
       </Section>
 
       <RidgeDivider from="mist" to="paper" flip />

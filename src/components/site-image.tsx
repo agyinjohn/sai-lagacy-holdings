@@ -16,9 +16,23 @@ const TONE_LAYERS: Record<ImageTone, { sky: Tone; layers: [Tone, Tone, Tone, Ton
  *  - No src: a tasteful ridge placeholder that states what is needed.
  *  - AI-generated concept: the concept caption is ALWAYS rendered, in the image and as text.
  */
-export function SiteImage({ id, priority = false, className = '', sizes = '(min-width: 1024px) 50vw, 100vw' }: { id: ImageId; priority?: boolean; className?: string; sizes?: string }) {
+export function SiteImage({
+  id,
+  priority = false,
+  className = '',
+  sizes = '(min-width: 1024px) 50vw, 100vw',
+  ratio,
+}: {
+  id: ImageId;
+  priority?: boolean;
+  className?: string;
+  sizes?: string;
+  /** Tailwind aspect classes that override the configured shape, for example 'aspect-[3/2] md:aspect-[2/1]'. */
+  ratio?: string;
+}) {
   const cfg: SiteImageConfig = IMAGES[id];
-  const aspect = { '16/9': 'aspect-[16/9]', '4/3': 'aspect-[4/3]', '3/2': 'aspect-[3/2]', '4/5': 'aspect-[4/5]', '21/9': 'aspect-[21/9]' }[cfg.aspect];
+  const configured = { '16/9': 'aspect-[16/9]', '4/3': 'aspect-[4/3]', '3/2': 'aspect-[3/2]', '4/5': 'aspect-[4/5]', '21/9': 'aspect-[21/9]' }[cfg.aspect];
+  const aspect = ratio ?? configured;
   const isConcept = cfg.kind === 'ai-concept';
   const t = TONE_LAYERS[cfg.tone];
 

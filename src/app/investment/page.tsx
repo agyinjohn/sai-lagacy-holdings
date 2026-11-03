@@ -41,8 +41,8 @@ export default function InvestmentPage() {
             </Reveal>
           ))}
         </div>
-        <div className="mt-10 grid items-center gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <SaiLogo />
+        <div className="mt-10 grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
+          <SaiLogo className="flex items-center lg:aspect-[16/9]" />
           <SiteImage id="investment-feature" />
         </div>
       </Section>

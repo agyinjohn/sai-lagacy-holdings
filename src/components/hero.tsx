@@ -41,7 +41,7 @@ export function Hero({ image }: { image?: HeroImage | null }) {
     >
       {image && (
         <>
-          <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="z-0 object-cover object-[50%_30%]" />
+          <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="z-0 object-cover object-[78%_35%] md:object-[50%_30%]" />
           {/* Keeps white text readable on any photograph: strong on the text side, lighter where the sky shows. */}
           <div aria-hidden="true" className="absolute inset-0 z-0 bg-gradient-to-r from-night/90 via-night/70 to-night/50 md:via-night/45 md:to-night/10" />
           <div aria-hidden="true" className="absolute inset-0 z-0 bg-gradient-to-b from-night/70 via-transparent to-transparent" style={{ backgroundSize: '100% 45%', backgroundRepeat: 'no-repeat' }} />
@@ -51,7 +51,7 @@ export function Hero({ image }: { image?: HeroImage | null }) {
       {/* Sun and glow (the drawn sun is replaced by the image when one is supplied) */}
       <motion.div
         aria-hidden="true"
-        style={{ y: sunY, bottom: 'clamp(150px, 30svh, 330px)' }}
+        style={{ y: sunY, bottom: 'clamp(120px, 24svh, 260px)' }}
         hidden={!!image}
         className="pointer-events-none absolute right-[9%] z-0 aspect-square w-[clamp(96px,15vw,210px)] rounded-full"
       >
@@ -60,7 +60,7 @@ export function Hero({ image }: { image?: HeroImage | null }) {
       </motion.div>
 
       {/* Ridges */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[1]" style={{ height: 'clamp(240px, 38svh, 420px)' }}>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[1]" style={{ height: 'clamp(190px, 28svh, 320px)' }}>
         {LAYERS.map((layer, i) => (
           <motion.svg
             key={i}
@@ -79,7 +79,7 @@ export function Hero({ image }: { image?: HeroImage | null }) {
         ))}
       </div>
 
-      <div className="wrap relative z-10 flex flex-1 flex-col justify-start pb-[clamp(250px,40svh,430px)] pt-[clamp(104px,17svh,170px)]">
+      <div className="wrap relative z-10 flex flex-1 flex-col justify-start pb-[clamp(210px,31svh,340px)] pt-[clamp(104px,17svh,170px)]">
         <p className="eyebrow mb-5 text-gold-light">A proposed 80-acre destination in Akuapem</p>
         <h1 id="hero-title" className="display-1 max-w-[11.5em]" style={{ fontSize: 'clamp(2.5rem, min(6.4vw, 11svh), 5.75rem)' }}>
           Ghana’s next cultural and wellness destination
@@ -100,7 +100,7 @@ export function Hero({ image }: { image?: HeroImage | null }) {
         </div>
       </div>
 
-      <p className="absolute bottom-2.5 right-[clamp(20px,5vw,72px)] z-10 text-[0.8125rem] text-mist">{image?.concept ? CONCEPT_CAPTION : CONCEPT_ILLUSTRATION_NOTE}</p>
+      <p className="absolute bottom-2.5 left-[clamp(20px,5vw,72px)] right-[clamp(20px,5vw,72px)] z-10 text-right text-[0.8125rem] text-mist">{image?.concept ? CONCEPT_CAPTION : CONCEPT_ILLUSTRATION_NOTE}</p>
     </section>
   );
 }

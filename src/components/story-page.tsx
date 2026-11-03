@@ -12,7 +12,7 @@ export function StoryPage({ page }: { page: StoryPageContent }) {
       <PageHero title={page.title} intro={page.intro} ctas={page.ctas} mood={page.mood} />
 
       <Section tone="deep" labelledBy="story-heading">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <Reveal>
             <h2 id="story-heading" className="display-2">
               {page.heading}
@@ -44,9 +44,9 @@ export function StoryPage({ page }: { page: StoryPageContent }) {
             {page.itemsHeading}
           </h2>
         </Reveal>
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="flex flex-wrap gap-5">
           {page.items.map((item, i) => (
-            <li key={item.title}>
+            <li key={item.title} className="min-w-[min(100%,280px)] flex-[1_1_calc((100%-2.5rem)/3)]">
               <Reveal delay={Math.min(i, 5) * 0.05} className="h-full">
                 <Card className="h-full !p-6">
                   <h3 className="display-3">{item.title}</h3>
