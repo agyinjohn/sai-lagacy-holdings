@@ -35,3 +35,21 @@ Every AI concept image is shown with the caption **"Concept for illustration onl
 ## Before an image goes live
 
 Ask Sai Legacy Holdings to confirm it does not misrepresent what is proposed, and confirm the generating tool's licence permits use on a public website. Record both in the register entry.
+
+## Alternative prompts for `plots-feature`
+
+The current plots image reuses the ridge photo. Use any one of these instead. Ratio 3:2, at least 1600 px wide. Save it as `public/images/plots-feature.jpg`, then run `npm run images:add` as above (or replace the file and update the register entry). Keep the generic wording: no plot boundaries, pegs, signs, roads, utilities or buildings, because none has been approved.
+
+**A. Open land at golden hour (closest to the slot's purpose)**
+> Wide, calm view of open gently sloping green grassland on a ridge in southern Ghana at golden hour, a few mature shade trees scattered across the land, long soft shadows, distant misty hills on the horizon, warm light, uncluttered foreground, no buildings, no people, no fences, no markers, no signs, no text, natural and unspoilt, editorial landscape photograph
+
+**B. A shared earth track leading into the land**
+> Soft-focus view along a simple red-earth track curving through open green land toward distant forested ridges at early morning, light mist in the valleys, young trees and tall grass either side, quiet and spacious, no vehicles, no buildings, no people, no signage, no text, natural light, editorial landscape photograph
+
+**C. Land and sky, low horizon (leaves most room for text)**
+> Low-horizon landscape of open green meadow with a single large shade tree on the left, wide dawn sky taking the upper two thirds in pale gold and soft green, faint hills in the distance, gentle atmosphere, no buildings, no people, no structures, no text, minimalist and serene, editorial landscape photograph
+
+**Negative prompt (if your tool supports one)**
+> people, faces, buildings, houses, fences, boundary markers, pegs, signs, text, logos, watermarks, roads, vehicles, power lines, patterns, textiles
+
+**Before approving:** the image must not be presented as the actual Phase 3 land unless Sai Legacy Holdings confirms it is. The concept caption is added automatically and cannot be removed.
