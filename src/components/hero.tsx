@@ -41,9 +41,10 @@ export function Hero({ image }: { image?: HeroImage | null }) {
     >
       {image && (
         <>
-          <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="z-0 object-cover" />
-          {/* Keeps white text readable on any photograph. */}
-          <div aria-hidden="true" className="absolute inset-0 z-0 bg-gradient-to-b from-night/85 via-deep/55 to-deep/15" />
+          <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="z-0 object-cover object-[50%_30%]" />
+          {/* Keeps white text readable on any photograph: strong on the text side, lighter where the sky shows. */}
+          <div aria-hidden="true" className="absolute inset-0 z-0 bg-gradient-to-r from-night/90 via-night/55 to-night/10 md:via-night/45" />
+          <div aria-hidden="true" className="absolute inset-0 z-0 bg-gradient-to-b from-night/70 via-transparent to-transparent" style={{ backgroundSize: '100% 45%', backgroundRepeat: 'no-repeat' }} />
         </>
       )}
 

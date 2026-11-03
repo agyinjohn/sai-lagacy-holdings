@@ -3,12 +3,13 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { aiRegister, applyImage, imageAspect, imageIds } from '../scripts/image-sync.mjs';
 
-const source = readFileSync(path.resolve(__dirname, '../src/content/images.ts'), 'utf8');
+const source = readFileSync(path.resolve(__dirname, 'fixtures/images-placeholders.txt'), 'utf8');
 const info = (over = {}) => ({
   kind: 'ai-concept', src: '/images/culture-feature.jpg', width: 1800, height: 1200,
   register: aiRegister({ tool: "Tool's v1", date: '2026-11-02', file: 'culture-feature.jpg' }), ...over,
 });
 
+// Uses a fixed snapshot of the all-placeholder config so the tests do not depend on which real images are wired in.
 describe('image sync', () => {
   it('finds all eight slots and their aspect ratios', () => {
     expect(imageIds(source)).toHaveLength(8);
