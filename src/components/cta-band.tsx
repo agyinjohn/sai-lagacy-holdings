@@ -8,17 +8,20 @@ import type { Tone } from '@/components/ridge';
 export function CtaBand({
   from,
   above = 'paper',
+  divider = true,
   heading = 'Be among the first to hear how The Courtyard takes shape',
   body = 'Choose the registration that fits. Each one is a priority list or an enquiry, with no commitment on either side.',
 }: {
   from: SourceKey;
   above?: Tone;
+  /** Set false when the section above already ends in a deep ridge edge. */
+  divider?: boolean;
   heading?: string;
   body?: string;
 }) {
   return (
     <>
-      <RidgeDivider from={above} to="deep" />
+      {divider && <RidgeDivider from={above} to="deep" />}
       <section aria-labelledby="cta-title" className="on-dark bg-deep text-white">
         <div className="wrap section-pad grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
           <div>

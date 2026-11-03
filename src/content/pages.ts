@@ -16,6 +16,8 @@ export interface Cta {
 
 export type RidgeMood = 'mist' | 'offwhite' | 'sage' | 'dawn';
 
+export type HeroVariant = 'split' | 'split-reverse' | 'full' | 'arch';
+
 export interface StoryPageContent {
   slug: string;
   path: string;
@@ -32,6 +34,10 @@ export interface StoryPageContent {
   ctas: Cta[];
   imageId: ImageId;
   mood: RidgeMood;
+  /** How the page opens. Varied so inner pages do not read as one template. */
+  hero: HeroVariant;
+  /** CSS object-position for cropping the hero image. */
+  focus?: string;
 }
 
 export const STORY_PAGES = {
@@ -65,6 +71,8 @@ export const STORY_PAGES = {
     ],
     imageId: 'culture-feature',
     mood: 'mist',
+    hero: 'split',
+    focus: '50% 55%',
   },
   hospitality: {
     slug: 'hospitality',
@@ -89,6 +97,8 @@ export const STORY_PAGES = {
     ctas: [{ label: 'Get guest updates', href: registerHref('guest-updates', 'hospitality'), variant: 'primary' }],
     imageId: 'hospitality-feature',
     mood: 'offwhite',
+    hero: 'full',
+    focus: '38% 50%',
   },
   wellness: {
     slug: 'wellness',
@@ -112,6 +122,8 @@ export const STORY_PAGES = {
     ctas: [{ label: 'Join the retreat waitlist', href: registerHref('transformation-retreat', 'wellness'), variant: 'primary' }],
     imageId: 'wellness-feature',
     mood: 'mist',
+    hero: 'arch',
+    focus: '28% 55%',
   },
   'later-life': {
     slug: 'later-life',
@@ -139,6 +151,8 @@ export const STORY_PAGES = {
     ],
     imageId: 'later-life-feature',
     mood: 'offwhite',
+    hero: 'split-reverse',
+    focus: '35% 55%',
   },
   'serviced-plots': {
     slug: 'serviced-plots',
@@ -160,6 +174,8 @@ export const STORY_PAGES = {
     ctas: [{ label: 'Register your interest', href: registerHref('serviced-plots', 'serviced-plots'), variant: 'primary' }],
     imageId: 'plots-feature',
     mood: 'sage',
+    hero: 'full',
+    focus: '50% 62%',
   },
 } as const satisfies Record<string, StoryPageContent>;
 

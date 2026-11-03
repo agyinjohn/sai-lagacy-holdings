@@ -4,7 +4,21 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { NAV } from '@/content/site';
-import { RidgeGlyph } from '@/components/ridge';
+import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
+import { RidgeGlyph, RidgeScene } from '@/components/ridge';
+
+/** A thin ridge line under the header that draws across as the page is read. */
+function ReadingRidge() {
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const draw = useSpring(scrollYProgress, { stiffness: 140, damping: 28, mass: 0.4 });
+  return (
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 1440 10" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 -bottom-[5px] h-[10px] w-full">
+      <path d="M0 6 C180 1 340 8 540 4 C740 0 900 8 1100 3 C1240 0 1350 5 1440 3" fill="none" stroke="var(--color-gold)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" strokeOpacity="0.25" />
+      <motion.path d="M0 6 C180 1 340 8 540 4 C740 0 900 8 1100 3 C1240 0 1350 5 1440 3" fill="none" stroke="var(--color-gold)" strokeWidth="2" vectorEffect="non-scaling-stroke" style={{ pathLength: reduce ? 0 : draw }} />
+    </svg>
+  );
+}
 
 export function Header() {
   const pathname = usePathname();
@@ -77,6 +91,7 @@ export function Header() {
         light ? 'on-dark bg-transparent' : 'bg-mist/95 shadow-[0_1px_0_rgba(18,59,42,0.12)] backdrop-blur'
       } ${open ? 'on-dark' : ''}`}
     >
+      {!open && <ReadingRidge />}
       <div className="wrap flex h-16 items-center justify-between gap-4">
         <Link href="/" className={`flex min-h-11 items-center gap-2.5 whitespace-nowrap font-heading text-[1.1rem] sm:gap-3 sm:text-[1.35rem] ${light ? 'text-white' : 'text-deep'}`} aria-label="The Courtyard by Sai, home">
           <RidgeGlyph className="h-5 w-8 sm:h-6 sm:w-9" />
@@ -131,15 +146,16 @@ export function Header() {
         id="mobile-nav"
         ref={panel}
         hidden={!open}
-        className="absolute inset-x-0 top-full h-[calc(100svh-64px)] overflow-y-auto bg-deep xl:hidden"
+        className="absolute inset-x-0 top-full h-[calc(100svh-64px)] overflow-hidden bg-deep xl:hidden"
       >
-        <nav aria-label="Main (mobile)" className="wrap flex flex-col py-6">
+        <RidgeScene mood="dawn" className="pointer-events-none absolute inset-x-0 bottom-0 h-[38%] w-full opacity-40" />
+        <nav aria-label="Main (mobile)" className="wrap relative flex h-full flex-col overflow-y-auto py-6">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={pathname === item.href ? 'page' : undefined}
-              className="flex min-h-14 items-center border-b border-white/15 font-heading text-2xl text-white aria-[current=page]:text-gold-light"
+              className="flex min-h-14 items-center border-b border-white/15 font-heading text-[1.7rem] text-white aria-[current=page]:text-gold-light"
             >
               {item.label}
             </Link>

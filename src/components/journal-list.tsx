@@ -39,12 +39,12 @@ export function JournalList({ initial }: { initial: Filter }) {
         Showing {entries.length} sample {entries.length === 1 ? 'article layout' : 'article layouts'}
         {filter === 'All' ? '' : ` in ${filter}`}.
       </p>
-      <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-10 grid gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
         {entries.map((e) => (
           <li key={e.id}>
-            <article className="flex h-full flex-col rounded-[2px] border border-pale bg-white p-6">
+            <article className="flex h-full flex-col border-t border-gold-ink/60 pb-8 pt-5">
               <p className="eyebrow text-gold-ink">{e.category}</p>
-              <h2 className="display-3 mt-3">{e.title}</h2>
+              <h2 className="display-3 mt-4 !text-[1.9rem]">{e.title}</h2>
               <p className="mt-3 text-deep/85">{e.summary}</p>
               <p className="mt-auto pt-5 text-sm text-deep/70">{e.date}</p>
             </article>

@@ -3,6 +3,7 @@ import { PageHero } from '@/components/page-hero';
 import { Reveal } from '@/components/reveal';
 import { RidgeDivider } from '@/components/ridge';
 import { SiteImage } from '@/components/site-image';
+import { PullLine } from '@/components/open-list';
 import { Eyebrow, Placeholder, Section, TextLink } from '@/components/ui';
 import { VISION } from '@/content/pages';
 import { DIAGRAM_NOTE } from '@/content/site';
@@ -55,13 +56,8 @@ export default function VisionPage() {
             <h2 id="concept-title" className="display-2">
               {VISION.concept.heading}
             </h2>
-            <div className="mt-6 space-y-5">
-              {VISION.concept.body.map((p) => (
-                <p key={p} className="max-w-[34em]">
-                  {p}
-                </p>
-              ))}
-            </div>
+            <PullLine className="mt-8">{VISION.concept.body[1]}</PullLine>
+            <p className="mt-6 max-w-[34em]">{VISION.concept.body[0]}</p>
           </Reveal>
           <Reveal delay={0.1}>
             <h3 className="display-3 mb-4">Components planned around the courtyard</h3>

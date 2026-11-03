@@ -1,5 +1,6 @@
 import type { PathwaySlug } from '@/content/pathways';
 import type { SourceKey } from '@/content/sources';
+import type { ImageId } from '@/content/images';
 
 export interface MapLink {
   label: string;
@@ -12,6 +13,8 @@ export interface MapRoom {
   text: string;
   /** Page for this component. */
   explore: MapLink;
+  /** Image shown in the courtyard panel when this space is selected. */
+  imageId?: ImageId;
   /** Registration routes for this component. */
   register: { label: string; pathway: PathwaySlug; from: SourceKey; detail?: string }[];
 }
@@ -23,6 +26,7 @@ export interface MapRoom {
 export const MAP_ROOMS: MapRoom[] = [
   {
     id: 'culture',
+    imageId: 'culture-feature',
     title: 'Culture & Experiences',
     text: 'Arts, music, food, heritage and creative programmes for every visitor.',
     explore: { label: 'Explore culture', href: '/culture' },
@@ -30,6 +34,7 @@ export const MAP_ROOMS: MapRoom[] = [
   },
   {
     id: 'hospitality',
+    imageId: 'hospitality-feature',
     title: 'Hospitality, Nature & Leisure',
     text: 'A proposed hotel, chalets, dining, events, recreation and time outdoors.',
     explore: { label: 'Explore hospitality', href: '/hospitality' },
@@ -37,6 +42,7 @@ export const MAP_ROOMS: MapRoom[] = [
   },
   {
     id: 'wellness',
+    imageId: 'wellness-feature',
     title: 'Wellness & Transformation Retreats',
     text: 'Planned retreats for restoration, wellbeing, reconnection and personal growth.',
     explore: { label: 'Explore wellness', href: '/wellness' },
@@ -44,6 +50,7 @@ export const MAP_ROOMS: MapRoom[] = [
   },
   {
     id: 'plots',
+    imageId: 'plots-feature',
     title: 'Serviced Plots: Phase 3',
     text: 'A proposed future opportunity to become part of the wider lifestyle vision.',
     explore: { label: 'Explore serviced plots', href: '/serviced-plots' },
@@ -51,6 +58,7 @@ export const MAP_ROOMS: MapRoom[] = [
   },
   {
     id: 'later-life',
+    imageId: 'later-life-feature',
     title: 'Longevity & Later-Life Living',
     text: 'Proposed communities built around independence, dignity and quality of life.',
     explore: { label: 'Explore later-life living', href: '/later-life' },
@@ -61,6 +69,7 @@ export const MAP_ROOMS: MapRoom[] = [
   },
   {
     id: 'investment',
+    imageId: 'investment-feature',
     title: 'Investment: The Legacy Unit',
     text: 'Explore the proposed Legacy Unit and wider development partnerships.',
     explore: { label: 'Explore the Legacy Unit', href: '/investment' },

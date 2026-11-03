@@ -3,7 +3,7 @@ import { SaiLogo } from '@/components/logo';
 import { Reveal } from '@/components/reveal';
 import { RidgeDivider } from '@/components/ridge';
 import { SiteImage } from '@/components/site-image';
-import { ButtonLink, Card, Eyebrow, Placeholder, Section } from '@/components/ui';
+import { ButtonLink, Eyebrow, Placeholder, Section } from '@/components/ui';
 import { registerHref } from '@/content/links';
 import { INVESTMENT } from '@/content/pages';
 import { pageMetadata } from '@/lib/metadata';
@@ -31,13 +31,16 @@ export default function InvestmentPage() {
             Investment overview
           </h2>
         </Reveal>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-x-12 gap-y-2 md:grid-cols-3">
           {INVESTMENT.overview.map((o, i) => (
             <Reveal key={o.title} delay={i * 0.07} className="h-full">
-              <Card className="h-full text-deep">
-                <h3 className="display-3">{o.title}</h3>
-                <p className="mt-3">{o.text}</p>
-              </Card>
+              <div className="h-full border-t border-gold-light/70 pb-8 pt-6">
+                <span aria-hidden="true" className="block font-heading text-[2.75rem] leading-none text-gold-light">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="display-3 mt-4">{o.title}</h3>
+                <p className="mt-3 max-w-[26em] text-pale">{o.text}</p>
+              </div>
             </Reveal>
           ))}
         </div>

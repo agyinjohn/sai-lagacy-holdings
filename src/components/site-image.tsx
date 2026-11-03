@@ -11,6 +11,58 @@ const TONE_LAYERS: Record<ImageTone, { sky: Tone; layers: [Tone, Tone, Tone, Ton
   mist: { sky: 'paper', layers: ['softSage', 'pale', 'sage', 'mid'] },
 };
 
+/** Small refined tag carrying the mandatory concept caption. The wording is fixed and must always appear. */
+export function ConceptPill({ className = '' }: { className?: string }) {
+  return (
+    <span
+      className={`inline-flex max-w-[calc(100%-1.5rem)] items-start gap-2 rounded-[2px] bg-night/75 px-2.5 py-1.5 text-[0.7rem] leading-snug text-white backdrop-blur-sm ${className}`}
+    >
+      <span aria-hidden="true" className="mt-[0.3em] h-1.5 w-1.5 shrink-0 rounded-full bg-gold-light" />
+      {CONCEPT_CAPTION}
+    </span>
+  );
+}
+
+/**
+ * Fills its positioned parent with an image from the config (hero, full-bleed and map use this).
+ * AI concept images always carry the concept caption unless the caller renders it itself.
+ */
+export function ImageFill({
+  id,
+  priority = false,
+  sizes = '100vw',
+  objectPosition,
+  caption = true,
+  className = '',
+}: {
+  id: ImageId;
+  priority?: boolean;
+  sizes?: string;
+  objectPosition?: string;
+  caption?: boolean;
+  className?: string;
+}) {
+  const cfg: SiteImageConfig = IMAGES[id];
+  const t = TONE_LAYERS[cfg.tone];
+  return (
+    <div className={`absolute inset-0 overflow-hidden ${className}`} style={{ background: TONES[t.sky] }}>
+      {cfg.src ? (
+        <Image src={cfg.src} alt={cfg.alt} fill sizes={sizes} priority={priority} className="object-cover" style={{ objectPosition }} />
+      ) : (
+        <>
+          <svg viewBox={RIDGE_VIEWBOX} preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false" className="absolute inset-0 h-full w-full">
+            {RIDGE_PATHS.map((d, i) => (
+              <path key={i} d={d} fill={TONES[t.layers[i] as Tone]} />
+            ))}
+          </svg>
+          <span className="absolute left-3 top-3 rounded-[2px] bg-white/85 px-2.5 py-1 text-xs font-semibold text-deep">[Image to be supplied]</span>
+        </>
+      )}
+      {caption && cfg.kind === 'ai-concept' && <ConceptPill className="absolute bottom-3 left-3" />}
+    </div>
+  );
+}
+
 /**
  * Renders an image from the central config (src/content/images.ts).
  *  - No src: a tasteful ridge placeholder that states what is needed.
@@ -57,9 +109,7 @@ export function SiteImage({
             </span>
           </>
         )}
-        {isConcept && (
-          <span className="absolute inset-x-0 bottom-0 bg-night/85 px-3 py-2 text-xs text-white">{CONCEPT_CAPTION}</span>
-        )}
+        {isConcept && <ConceptPill className="absolute bottom-3 left-3" />}
       </div>
       <figcaption className="mt-2 text-sm text-deep/75">
         {isConcept ? cfg.alt : cfg.src ? cfg.alt : cfg.brief}

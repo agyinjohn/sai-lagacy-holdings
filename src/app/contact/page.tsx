@@ -1,5 +1,6 @@
 import { RidgeDivider } from '@/components/ridge';
-import { ButtonLink, Placeholder, Section } from '@/components/ui';
+import { ActionRows } from '@/components/action-rows';
+import { Placeholder, Section } from '@/components/ui';
 import { CONTACT_OPTIONS } from '@/content/pages';
 import { PLACEHOLDERS } from '@/content/site';
 import { pageMetadata } from '@/lib/metadata';
@@ -24,25 +25,13 @@ export default function ContactPage() {
       </section>
       <RidgeDivider from="mist" to="paper" />
       <Section tone="paper" pad={false} className="pb-[clamp(64px,9vw,120px)] pt-6">
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {CONTACT_OPTIONS.map((c) => (
-            <li key={c.title} className="flex flex-col rounded-[2px] border border-pale bg-white p-6">
-              <h2 className="display-3">{c.title}</h2>
-              <p className="mt-3 text-deep/85">{c.text}</p>
-              <div className="mt-auto pt-6">
-                <ButtonLink href={c.href} variant="secondary">
-                  {c.label}
-                </ButtonLink>
-              </div>
-            </li>
-          ))}
-          <li className="flex flex-col rounded-[2px] border border-pale bg-white p-6">
-            <h2 className="display-3">Reach us directly</h2>
-            <div className="mt-3">
-              <Placeholder>{PLACEHOLDERS.contactDetails}</Placeholder>
-            </div>
-          </li>
-        </ul>
+        <ActionRows rows={CONTACT_OPTIONS.map((c) => ({ title: c.title, text: c.text, label: c.label, href: c.href }))} />
+        <div className="mt-12 grid gap-4 md:grid-cols-[1.1fr_1.4fr] md:gap-10 md:px-4">
+          <h2 className="display-3 !text-[clamp(1.45rem,2.4vw,2.1rem)]">Reach us directly</h2>
+          <div className="max-w-[34em]">
+            <Placeholder>{PLACEHOLDERS.contactDetails}</Placeholder>
+          </div>
+        </div>
       </Section>
     </>
   );

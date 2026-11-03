@@ -107,3 +107,19 @@
     text-transform: uppercase;
   }
 }
+
+/* Slow, quiet drift on the hero photograph. Off when reduced motion is preferred. */
+@media (prefers-reduced-motion: no-preference) {
+  .kenburns {
+    animation: kenburns 34s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+}
+@keyframes kenburns {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.11) translate3d(-1.5%, -1%, 0);
+  }
+}
