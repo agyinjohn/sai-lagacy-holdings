@@ -5,7 +5,6 @@ import { SITE } from '@/content/site';
 import { MotionProvider } from '@/components/reveal';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { PrototypeBanner } from '@/components/prototype-banner';
 import { CookieConsent } from '@/components/cookie-consent';
 
 const marcellus = localFont({
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <MotionProvider>
-          <PrototypeBanner />
           <Header />
           <main id="main" tabIndex={-1} className="outline-none">
             {children}
