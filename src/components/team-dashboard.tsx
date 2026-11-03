@@ -89,7 +89,40 @@ export function TeamDashboard({ records }: { records: RegistrationRecord[] }) {
           </p>
         </div>
       ) : (
-        <div role="region" aria-label="Registrations table" tabIndex={0} className="mt-8 overflow-x-auto rounded-[2px] border border-pale bg-white">
+        <>
+        {/* Phones: one card per registration, so nothing hides behind a sideways scroll. */}
+        <ul aria-label="Registrations" data-testid="registration-cards" className="mt-8 flex flex-col gap-4 md:hidden">
+          {rows.map((r) => (
+            <li key={r.id} className="rounded-[2px] border border-pale bg-white p-4">
+              <p className="font-heading text-xl">{r.name}</p>
+              {r.organisation && <p className="text-sm text-deep/75">{r.organisation}</p>}
+              <p className="mt-1 text-sm text-gold-ink">{r.category}</p>
+              <dl className="mt-3 grid grid-cols-[6.5rem_1fr] gap-x-3 gap-y-1.5 text-[0.95rem]">
+                <dt className="text-deep/75">Date</dt>
+                <dd>{r.date}</dd>
+                <dt className="text-deep/75">Email</dt>
+                <dd className="break-all">{r.email}</dd>
+                {r.phone && (
+                  <>
+                    <dt className="text-deep/75">Phone</dt>
+                    <dd>{r.phone}</dd>
+                  </>
+                )}
+                <dt className="text-deep/75">Location</dt>
+                <dd>{r.location}</dd>
+                <dt className="text-deep/75">Detail</dt>
+                <dd>{r.detail}</dd>
+                <dt className="text-deep/75">Message</dt>
+                <dd className="break-words">{r.message || <span className="text-deep/75">None</span>}</dd>
+                <dt className="text-deep/75">Source</dt>
+                <dd>{sourceLabel(r.source)}</dd>
+                <dt className="text-deep/75">Reference</dt>
+                <dd className="font-mono text-sm">{r.ref}</dd>
+              </dl>
+            </li>
+          ))}
+        </ul>
+        <div role="region" aria-label="Registrations table" tabIndex={0} className="mt-8 hidden overflow-x-auto rounded-[2px] border border-pale bg-white md:block">
           <table className="w-full min-w-[1100px] border-collapse text-left text-[0.95rem]">
             <caption className="sr-only">Registrations for {sheet === 'All' ? 'all categories' : sheet}</caption>
             <thead>
@@ -124,6 +157,7 @@ export function TeamDashboard({ records }: { records: RegistrationRecord[] }) {
             </tbody>
           </table>
         </div>
+        </>
       )}
       <p className="mt-4 text-sm text-deep/70">Exports follow the current worksheet and search. Text that could run as a spreadsheet formula is neutralised in every export.</p>
     </div>

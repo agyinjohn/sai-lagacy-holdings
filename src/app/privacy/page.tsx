@@ -41,7 +41,7 @@ export default function PrivacyPage() {
 
           <div>
             <h2 className="display-3 mb-3">What each registration records</h2>
-            <ul className="list-disc space-y-1 pl-5">
+            <ul className="list-disc space-y-1 pl-5 sm:columns-2 sm:gap-10 [&>li]:break-inside-avoid">
               {FIELDS.map((f) => (
                 <li key={f}>{f}</li>
               ))}

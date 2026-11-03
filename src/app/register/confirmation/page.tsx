@@ -25,6 +25,11 @@ export default async function ConfirmationPage({ searchParams }: Props) {
     <>
       <section className="bg-mist" aria-labelledby="page-title">
         <div className="wrap pb-10 pt-[clamp(40px,6vw,80px)]">
+          <svg viewBox="0 0 56 56" aria-hidden="true" focusable="false" className="mb-5 h-14 w-14">
+            <circle cx="28" cy="28" r="26" fill="var(--color-deep)" />
+            <circle cx="28" cy="28" r="26" fill="none" stroke="var(--color-gold-light)" strokeOpacity="0.5" strokeWidth="2" />
+            <path d="M16 29.5 L24.5 38 L40 20" fill="none" stroke="var(--color-gold-light)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
           <p className="eyebrow mb-3 text-gold-ink">Registration received</p>
           <h1 id="page-title" tabIndex={-1} className="display-1" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             Thank you

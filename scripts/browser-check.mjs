@@ -139,7 +139,7 @@ for (const [label, width, height, mobile] of [['mobile 360', 360, 740, true], ['
   await ap.getByRole('button', { name: 'Sign in' }).click();
   await ap.getByRole('heading', { name: /Registration tracker/ }).waitFor();
   await ap.getByRole('button', { name: /^Investment \(/ }).waitFor();
-  ok(await ap.locator('table').isVisible(), 'team view lists registrations after sign in');
+  ok(await ap.locator('table:visible, [data-testid=registration-cards]:visible').first().isVisible(), 'team view lists registrations after sign in');
   await ap.getByRole('button', { name: /^Investment \(/ }).click();
   ok((await ap.locator('tbody tr').count()) >= 1, 'category worksheet filter works');
   await ap.getByLabel('Search registrations').fill('zzz-no-match');
