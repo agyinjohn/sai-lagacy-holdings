@@ -33,9 +33,6 @@ export const FOOTER_LINKS: NavItem[] = [
   { label: 'Join a waitlist', href: '/register' },
 ];
 
-export const PROTOTYPE_BANNER =
-  'Prototype for discussion. No emails are sent. Please do not enter real sensitive information.';
-
 export const PROTOTYPE_FORM_NOTICE =
   'This is a prototype. Do not enter sensitive personal, health or financial information. Details you submit are kept only for the demonstration and no emails are sent.';
 

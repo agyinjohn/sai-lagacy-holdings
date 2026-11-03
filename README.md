@@ -4,7 +4,7 @@ A prototype website for **The Courtyard by Sai**, a proposed 80-acre, multi-phas
 
 Creative concept: **Rooted on the Ridge**. The layered ridge line is the main graphic motif, inspired by Akuapem's ridges and the shared open courtyard of a Ghanaian compound house. No kente, Adinkra or other cultural patterns are used because no approved artwork has been supplied.
 
-> This is a prototype. It is clearly marked as one on every page, forms warn visitors not to enter sensitive information, and **no real email is ever sent**.
+> This is a prototype. It is marked as one in the footer and privacy notice, forms warn visitors not to enter sensitive information, and **no real email is ever sent**.
 
 ## Stack
 
@@ -216,7 +216,7 @@ The adapter is tested against an in-process fake of the Upstash REST endpoint, n
 - [ ] **Investment content:** supply the approved Legacy Unit overview and legal disclaimer. Do not publish sensitive investment documents. Have investment promotion wording reviewed for regulatory compliance.
 - [ ] **Content:** replace every bracketed placeholder (masterplan and phase dates, contact details, later-life and plot details, journal articles). Use "proposed" or "planned" until things are built or approved. Do not add prices, returns, dates, room counts, statistics, partners, testimonials or awards without approved sources.
 - [ ] **Images:** supply licensed, commissioned or approved images, complete the asset register, and keep the concept caption on all AI-generated images.
-- [ ] **Remove prototype signals:** the prototype banner, form notices and footer wording should be removed or revised at launch.
+- [ ] **Remove prototype signals:** the form notices, footer wording and privacy notice still describe this as a prototype and should be revised at launch.
 - [ ] **Content Security Policy:** it currently allows inline scripts, which Next.js needs without a nonce. Add per-request nonces through a proxy for a stricter policy.
 - [ ] **Monitoring and backups:** error monitoring, uptime checks and backups for stored registrations.
 - [ ] **Dependencies:** `npm audit` reports moderate minimatch advisories (denial of service via glob patterns). They arrive through lint tooling and through `exceljs` (a runtime dependency, used only by the authenticated Excel export and not fed user-controlled glob patterns). Re-check before launch, and consider a lighter Excel library if one is acceptable.
