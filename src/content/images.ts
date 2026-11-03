@@ -44,7 +44,8 @@ export interface SiteImageConfig {
   register: AssetRegisterEntry;
 }
 
-const none: AssetRegisterEntry = {
+/** Register entry for a slot that has no image yet. Use it when adding a new slot. */
+export const none: AssetRegisterEntry = {
   source: 'None. Placeholder only.',
   licence: 'Not applicable',
   permittedUse: 'Not applicable until an image is supplied',
@@ -170,15 +171,22 @@ export const IMAGES = {
   },
   'plots-feature': {
     id: 'plots-feature',
-    alt: 'Open land proposed for serviced plots',
+    alt: 'Concept view of misty forested ridges at sunrise',
     brief: 'Open land in the Phase 3 area, only if approved by Sai Legacy Holdings.',
     aspect: '3/2',
-    kind: 'placeholder',
-    src: null,
-    width: 1800,
-    height: 1200,
+    kind: 'ai-concept',
+    src: '/images/plots-feature.jpg',
+    width: 1920,
+    height: 1088,
     tone: 'deep',
-    register: none,
+    register: {
+      source: 'AI-generated concept image (plots-feature.jpg). Tool: Not recorded (supplied from agyinjohn/build-it-better, src/assets). Generated: 2026-11-03. Prompt: [prompt reference to be recorded]',
+      licence: '[Licence terms of the generating tool to be confirmed for this use]',
+      permittedUse: 'Concept illustration on this prototype only, always with the concept caption. Not an approved design or completed facility.',
+      approvalStatus: 'pending-review',
+      approvedBy: '[Not yet approved]',
+      notes: 'Same source file as home-hero (concept-akuapem-ridges.jpg), reused because no image of the Phase 3 land exists. It shows forested ridges, not serviced or cleared plots, and is not the Phase 3 site: confirm it is acceptable on the plots page and replace it with an approved site image when available.',
+    },
   },
   'investment-feature': {
     id: 'investment-feature',
